@@ -28,7 +28,6 @@
 
 		methods: {
 			click (event) {
-				event.preventDefault()
 				this.$emit('click');
 			}
 		}

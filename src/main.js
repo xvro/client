@@ -6,12 +6,12 @@ var app = new Vue({
 	el: '#app',
 	data: function () {
 		return {
-			currentRoute: window.location.pathname
+			currentRoute: window.location.hash.substring(1)
 		}
 	},
 	computed: {
     	ViewComponent () {
-      		const matchingView = routes[this.currentRoute] ? routes[this.currentRoute].view : 'Home'
+      		const matchingView = routes[this.currentRoute] ? routes[this.currentRoute].view : '404'
       		
       		return matchingView
 	        			? require('./pages/' + matchingView + '.vue')
@@ -22,3 +22,5 @@ var app = new Vue({
     	return h(this.ViewComponent)
   	}
 });
+
+alertify.logPosition("top right");

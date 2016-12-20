@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<app-menu-item v-for="item in items" 
-						:href="item.href"
+						:href="'#' + item.href"
 						:label="item.label"
 						@click="itemClick(item)">
 		</app-menu-item>
@@ -34,13 +34,6 @@
 		methods: {
 			itemClick (item) {
 				this.$root.currentRoute = item.href;
-
-				window.history.pushState(
-		          	null,
-					routes[item.href],
-	          		item.href
-		        );
-
 				this.$emit('change', item);
 			}
 		}

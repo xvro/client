@@ -24,7 +24,7 @@
             </div>
 
             <div class="ui divided list selection" v-if="items.length>0">
-                <div class="item" v-for="item in filteredPasswords"
+                <div class="item" v-for="item in filteredItems"
                           @click="selectItem(item)">
                     <div class="content">
                         <div class="header">{{ item.name }}</div>
@@ -42,23 +42,22 @@
 
             <form @submit.prevent="saveItem">
                 <div class="ui form">
-                    <div class="field required">
-                        <div class="ui input">
-                            <input type="text" placeholder="Name"
-                                    v-model="item.name">
-                        </div>
+                    <div :class="{field: true, required: true, error: errors['name']}">
+                        <label>Name</label>
+                        <input type="text" placeholder="Name"
+                                v-model="item.name">
                     </div>
-                    <div class="field required">
-                        <div class="ui input">
-                            <input type="text" placeholder="Type"
-                                v-model="item.type">
-                        </div>
+
+                    <div :class="{field: true, required: true, error: errors['type']}">
+                        <label>Type</label>
+                        <input type="text" placeholder="Type"
+                            v-model="item.type">
                     </div>
-                    <div class="field required">
-                        <div class="ui input">
-                            <input type="text" placeholder="Description"
-                                v-model="item.description">
-                        </div>
+
+                    <div :class="{field: true, required: true, error: errors['description']}">
+                        <label>Description</label>
+                        <input type="text" placeholder="Description"
+                            v-model="item.description">
                     </div>
 
                     <div class="field required" v-if="item.id">
@@ -69,11 +68,10 @@
                         </button>
                     </div>
 
-                    <div class="field required" v-if="!item.id">
-                        <div class="ui input">
-                            <input type="text" placeholder="Password"
-                                v-model="item.plaintext">
-                        </div>
+                    <div :class="{field: true, required: true, error: errors['password']}" v-if="!item.id">
+                        <label>Password</label>
+                        <input type="text" placeholder="Password"
+                            v-model="item.plaintext">
                     </div>
                     
                     <div class="ui grid">
@@ -99,74 +97,20 @@
 </template>
 
 <script>
-    import MainLayout from '../layouts/Main.vue';
     import { PasswordRepository } from '../repositories/password.js';
+    import VueComponent from '../controllers/crud.js';
 
-	export default {
-        components: {
-            MainLayout
+    let crud = VueComponent({
+        data: {
+            loadingPassword: false,
+            plaintext: 'Show password',
+            repository: new PasswordRepository()
         },
-
-        data () {
-            return {
-                search: '',
-                item: null,
-                items: [],
-                loadingPassword: false,
-                plaintext: 'Show password',
-                repository: new PasswordRepository()
-            };
-        },
-
-        created () {
-            this.loadPasswords();
-        },
-
-        computed: {
-            filteredPasswords () {
-                var self = this
-                return self.items.filter(function (pass) {
-                    return (pass.name + ' ' + pass.description).indexOf(self.search) !== -1
-                })
-            }
-        },
-
         methods: {
-            loadPasswords () {
-                var self = this;
-
-                self.repository.findAll().then(function (items) {
-                    self.items = items;
-                });
+            reset () {
+                this.plaintext = 'Show password';
             },
 
-            selectItem (item) {
-                this.item = item;
-                this.plaintext = 'Show password';                
-            },
-
-            newItem () {
-                this.item = {};
-            },
-
-            saveItem () {
-                var self = this;
-
-                self.repository.save(self.item).then(function () {
-                    self.loadPasswords();
-                    self.item = {};
-                });
-            },
-
-            removeItem () {
-                var self = this;
-                
-                self.repository.delete(self.item).then(function () {
-                    self.loadItems();
-                    self.item = {};
-                });
-            },
-            
             showPassword (item) {
                 var self = this;
 
@@ -178,5 +122,7 @@
                 });
             }
         }
-    }
+    });
+
+    export default crud
 </script>

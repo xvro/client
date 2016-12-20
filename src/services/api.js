@@ -14,7 +14,8 @@ export default {
                 deferred.resolve(response);
             },
             error: function (response) {
-                deferred.reject(response);
+                var data = JSON.parse(response.responseText);
+                deferred.reject(data);
             }
         });
 

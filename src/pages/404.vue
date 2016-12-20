@@ -1,6 +1,7 @@
 <template>
 	<main-layout>
-		404
+		<h1 class="ui header">404</h1>
+		<p>Page not found</p>
 	</main-layout>
 </template>
 

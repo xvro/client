@@ -19,12 +19,14 @@ export class GenericRepository {
     }
 
     save (entity) {
-        var promise;
+        var promise, 
+            data = jQuery.extend({}, entity);
 
         if (entity.id) {
-            promise = ApiService.put(this.prefix + '/' + entity.id, entity);
+            delete data.id;
+            promise = ApiService.put(this.prefix + '/' + entity.id, data);
         } else {
-            promise = ApiService.post(this.prefix, entity);
+            promise = ApiService.post(this.prefix, data);
         }
 
         return promise;

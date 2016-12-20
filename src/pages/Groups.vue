@@ -41,11 +41,10 @@
 
             <form @submit.prevent="saveItem">
                 <div class="ui form">
-                    <div class="field required">
-                        <div class="ui input">
-                            <input type="text" placeholder="Name"
-                                    v-model="item.name">
-                        </div>
+                    <div :class="{field: true, required: true, error: errors['name']}">
+                        <label>Name</label>
+                        <input type="text" placeholder="Name"
+                                v-model="item.name">
                     </div>
 
                     <div class="ui grid">
@@ -68,74 +67,18 @@
             </form>
         </div>
     </main-layout>
-	</main-layout>
 </template>
 
 <script>
-    import MainLayout from '../layouts/Main.vue';
     import { GroupRepository } from '../repositories/group.js';
+    import VueComponent from '../controllers/crud.js';
 
-	export default {
-        components: {
-            MainLayout
-        },
-
-        data () {
-            return {
-                search: '',
-                item: null,
-                items: [],
-                repository: new GroupRepository()
-            };
-        },
-
-        created () {
-            this.loadItems();
-        },
-
-        computed: {
-            filteredItems () {
-                var self = this
-                return self.items.filter(function (item) {
-                    return item.name.indexOf(self.search) !== -1
-                })
-            }
-        },
-
-        methods: {
-            loadItems () {
-                var self = this;
-
-                self.repository.findAll().then(function (items) {
-                    self.items = items;
-                });
-            },
-
-            selectItem (item) {
-                this.item = item;
-            },
-
-            newItem () {
-                this.item = {};
-            },
-
-            saveItem () {
-                var self = this;
-
-                self.repository.save(self.item).then(function () {
-                    self.loadItems();
-                    self.item = {};
-                });
-            },
-
-            removeItem () {
-                var self = this;
-
-                self.repository.delete(self.item).then(function () {
-                    self.loadItems();
-                    self.item = {};
-                });
-            }
+    let crud = VueComponent({
+        data: {
+            repository: new GroupRepository()
         }
-    }
+    });
+
+    export default crud
+
 </script>
