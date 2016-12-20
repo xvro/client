@@ -3,38 +3,15 @@
 		<div class="eight wide column">
             <h2 class="ui header">Users</h2>
 
-            <div class="ui grid">
-                <div class="two column row">
-                    <div class="left floated column">
-
-                        <div class="ui icon input">
-                            <input type="text" placeholder="Search..." v-model="search">
-                            <i class="search icon"></i>
-                        </div>
-
+            <list-view :items="items"
+                        @newItem="newItem"
+                        @selectItem="selectItem">
+                <template scope="props">
+                    <div class="header">
+                        {{ props.item.name }}
                     </div>
-                    <div class="right floated right aligned column">
-                        
-                        <button type="button" class="ui primary button" @click="newItem">
-                            <i class="plus icon"></i>
-                            Add user
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui divided list selection" v-if="items.length>0">
-                <div class="item" v-for="item in filteredItems"
-                          @click="selectItem(item)">
-                    <div class="content">
-                    	<div class="header">{{ item.username }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui message" v-if="items.length===0">
-                <p>Empty</p>
-            </div>
+                </template>
+            </list-view>
         </div>
         <div class="eight wide column" v-if="item">
             <h2 class="ui header">User form</h2>

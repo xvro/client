@@ -1,9 +1,9 @@
 import MainLayout from '../layouts/Main.vue';
+import ListView from '../components/ListView.vue';
 
 export default function (props) {
     let defaults = {
         data: {
-            search: '',
             item: null,
             items: [],
             repository: null,
@@ -11,25 +11,8 @@ export default function (props) {
         },
 
         components: {
-            MainLayout
-        },
-
-        computed: {
-            filteredItems () {
-                let self = this;
-
-                return this.items.filter((item) => {
-                    for (let i in item) {
-                        let prop = item[i];
-                        if (typeof(prop) === 'string') {
-                            if (prop.indexOf(self.search) !== -1) {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                });
-            }
+            MainLayout,
+            ListView
         },
 
         methods: {
